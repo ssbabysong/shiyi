@@ -195,18 +195,24 @@ svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-l
 .d-hint{font-size:12px;color:var(--muted);margin-top:8px}
 
 /* ---------- wander ---------- */
-.wander-wrap{display:flex;flex-direction:column;align-items:stretch}
-.wander-lede{color:var(--muted);font-size:14px;margin:0 0 14px}
-.deck{position:relative;min-height:340px;display:grid;touch-action:pan-y}
-.deck .card{grid-area:1/1;margin:0;align-self:start;box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.9,.3,1),opacity .35s}
+/* 漫游页不滚动：卡片区占满剩余高度，卡片和图片都限制在这块区域里，按钮始终可见 */
+.wander-wrap{display:flex;flex-direction:column;overflow:hidden;padding-bottom:calc(var(--tabbar-h) + var(--sab) + 18px)}
+.wander-lede{color:var(--muted);font-size:14px;margin:0 0 14px;flex:none}
+.deck{position:relative;flex:1 1 auto;min-height:200px;touch-action:pan-y}
+.deck .card{position:absolute;left:0;top:0;width:100%;max-height:100%;margin:0;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.9,.3,1),opacity .35s}
 .deck .card.under{transform:translateY(14px) scale(.95);opacity:.5;pointer-events:none}
+.deck .card > *{flex:none}
+.deck .card .img{flex:0 1 auto;min-height:80px;width:100%;object-fit:contain;background:var(--paper)}
+.deck .card .body{flex:0 1 auto;min-height:0;overflow:hidden;padding:18px 18px 0}
+.deck .card .q-text,.deck .card .n-text,.deck .card .caption{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:8;overflow:hidden}
+.deck .card .caption{-webkit-line-clamp:3}
+.deck .card .img + .body{flex-shrink:0}
 .deck .card .q-text{font-size:24px}
 .deck .card .n-text{font-size:18px}
 .deck .card .l-domain{font-size:26px}
-.deck .card .bands div{height:64px}
-.deck .card .body{padding:18px 18px 0}
+.deck .card .bands div{height:56px}
 .deck .card .meta{padding:14px 18px;font-size:11px}
-.wander-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.wander-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;flex:none}
 .hint{text-align:center;color:var(--muted);font-size:12px}
 
 /* ---------- lists ---------- */
