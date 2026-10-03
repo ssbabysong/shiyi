@@ -127,7 +127,7 @@
     <div class="grabber"></div>
     <div class="sheet-head">
       <button class="text-btn" type="button" id="composeCancel">取消</button>
-      <b>收藏新灵感</b>
+      <b id="composeTitle">收藏新灵感</b>
       <button class="text-btn strong" type="submit" id="composeSave">收进来</button>
     </div>
     <div class="kind-picker" id="kindPicker" role="tablist"></div>
@@ -146,6 +146,29 @@
   </header>
   <div class="scroll" id="detailBody"></div>
 </section>
+
+<!-- ============ 裁剪 ============ -->
+<div class="cropper" id="cropper" hidden role="dialog" aria-modal="true" aria-label="裁剪图片">
+  <div class="crop-head">
+    <button class="text-btn" type="button" id="cropCancel">取消</button>
+    <b>裁剪</b>
+    <button class="text-btn strong" type="button" id="cropDone">完成</button>
+  </div>
+  <div class="crop-stage" id="cropStage">
+    <canvas id="cropImg"></canvas>
+    <div class="crop-box" id="cropBox">
+      <i class="grid"></i>
+      <span data-h="nw"></span><span data-h="ne"></span><span data-h="sw"></span><span data-h="se"></span>
+    </div>
+  </div>
+  <div class="crop-foot">
+    <div class="crop-ratios" id="cropRatios"></div>
+    <div class="crop-actions">
+      <button type="button" class="crop-act" id="cropRotate"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/></svg>旋转</button>
+      <button type="button" class="crop-act" id="cropReset"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg>还原</button>
+    </div>
+  </div>
+</div>
 
 <!-- ============ 确认框 ============ -->
 <div class="sheet-scrim" id="confirmScrim" hidden>
