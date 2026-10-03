@@ -182,11 +182,12 @@ function cardBody(it, big){
   return [];
 }
 function card(it, onTap){
-  return h("article", {class:"card" + (it.sample ? " sample" : ""), tabindex:"0", "data-id": it.id,
+  const k = kindOf(it.type);
+  return h("article", {class:"card card-" + it.type + (it.sample ? " sample" : ""), tabindex:"0", "data-id": it.id,
       onclick: onTap, onkeydown: e => { if (e.key === "Enter") onTap(); }},
+    h("div", {class:"meta mono"}, h("span", {class:"no"}, pad(numberOf(it.id))), h("span", {class:"kind"}, it.sample ? "示例" : k.en + " · " + fmtDate(it.createdAt))),
     ...cardBody(it, false),
-    it.tags?.length ? h("div", {class:"tags"}, it.tags.map(t => h("span", {}, "#" + t))) : null,
-    h("div", {class:"meta mono"}, h("span", {class:"no"}, "No." + pad(numberOf(it.id))), h("span", {class:"kind"}, it.sample ? "示例" : fmtDate(it.createdAt))));
+    it.tags?.length ? h("div", {class:"tags mono"}, it.tags.map(t => h("span", {}, "#" + t))) : null);
 }
 
 /* ============================================================
@@ -247,8 +248,10 @@ $("#meBtn").onclick = () => go("me");
 $("#meBack").onclick = () => go("wall");
 
 function renderMe(){
-  $("#meCount").textContent = items.length + " 枚收藏";
   const first = items.length ? Math.min(...items.map(x => x.createdAt)) : null;
+  $("#meCount").textContent = items.length;
+  $("#meDays").textContent = first ? Math.floor((Date.now() - first) / DAY) + 1 : 0;
+  $("#meTags").textContent = new Set(items.flatMap(x => x.tags || [])).size;
   $("#meSince").textContent = first ? "从 " + new Date(first).toLocaleDateString("zh-CN", {year:"numeric", month:"long", day:"numeric"}) + " 开始收集" : "从今天开始收集";
   const th = settings.get("theme", "system");
   document.querySelectorAll("#themeSeg button").forEach(b => b.setAttribute("aria-checked", String(b.dataset.themeVal === th)));
@@ -279,6 +282,7 @@ function nextWander(){
     }
   }));
   const days = Math.max(0, Math.round((Date.now() - pick.createdAt) / DAY));
+  $("#wanderCount").textContent = pad(numberOf(pick.id)) + " / " + pad(p.length);
   $("#wanderLede").textContent = pick.sample ? "这是一枚示例。收藏多了以后，这里会翻出你忘掉的东西。"
     : days === 0 ? "今天刚收进来的" : `${days} 天前的你，收下了这一枚`;
   enableSwipe(c);
@@ -309,25 +313,41 @@ $("#wanderOpen").onclick = () => deckCur && openDetail(deckCur);
    详情页
    ============================================================ */
 let detailItem = null;
+const toolIcons = {
+  open: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  edit: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  del: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+};
+function toolBtn(icon, label, onclick, cls = ""){
+  return h("button", {type:"button", class:"tool-btn " + cls, onclick}, svgEl(toolIcons[icon]), h("span", {}, label));
+}
 function openDetail(it, fromHistory){
   detailItem = it;
   const k = kindOf(it.type);
   $("#detailNo").textContent = "No." + pad(numberOf(it.id));
-  const body = $("#detailBody");
-  const actions = [];
-  if (it.type === "link") actions.push(h("a", {class:"pill wide", href: it.url, target:"_blank", rel:"noopener"}, "打开链接 ↗"));
-  if (!it.sample && it.type !== "color") actions.push(h("button", {class:"pill", type:"button", onclick: () => showCompose(it.type, it)}, "编辑"));
   const copyText = it.type === "color" ? (it.colors || []).join(" ")
     : it.type === "link" ? it.url : it.type === "image" ? it.caption : [it.text, it.source && "— " + it.source].filter(Boolean).join("\n");
-  if (copyText) actions.push(h("button", {class:"pill ghost", type:"button", onclick: () => copy(copyText, "已复制")}, it.type === "image" ? "复制说明" : "复制"));
-  if (!it.sample) actions.push(h("button", {class:"pill danger", type:"button", onclick: () => confirmDelete(it)}, "删除"));
+  const tools = [
+    it.type === "link" && h("a", {class:"tool-btn accent", href: it.url, target:"_blank", rel:"noopener"}, svgEl(toolIcons.open), h("span", {}, "打开")),
+    !it.sample && it.type !== "color" && toolBtn("edit", "编辑", () => showCompose(it.type, it)),
+    copyText && toolBtn("copy", it.type === "image" ? "复制说明" : "复制", () => copy(copyText, "已复制")),
+    !it.sample && toolBtn("del", "删除", () => confirmDelete(it), "danger"),
+  ].filter(Boolean);
+  $("#detailTools").replaceChildren(...tools);
+  $("#detailTools").hidden = !tools.length;
+  const d = new Date(it.createdAt);
+  const body = $("#detailBody");
   body.replaceChildren(...[
-    h("p", {class:"d-eyebrow mono"}, k.en + " · " + k.zh + (it.sample ? " · 示例" : "")),
-    h("div", {class:"d-card"}, ...cardBody(it, true)),
+    h("div", {class:"d-eyebrow mono"}, h("span", {}, k.en + " · " + k.zh + (it.sample ? " · 示例" : "")), h("span", {}, d.getFullYear() + "." + fmtDate(it.createdAt))),
+    h("div", {class:"d-body d-" + it.type}, ...cardBody(it, true)),
     it.type === "color" ? h("p", {class:"d-hint"}, "点色块即可复制色值") : null,
-    it.tags?.length ? h("div", {class:"d-tags"}, it.tags.map(t => h("button", {type:"button", onclick: () => { closeDetail(); view.tag = t; view.kind = "all"; go("wall"); renderWall(); }}, "#" + t))) : null,
-    h("p", {class:"d-time"}, "收于 " + fmtFull(it.createdAt) + (it.updatedAt ? " · 改于 " + fmtFull(it.updatedAt) : "")),
-    h("div", {class:"d-actions"}, actions)].filter(Boolean));
+    it.tags?.length ? h("div", {class:"d-tags mono"}, it.tags.map(t => h("button", {type:"button", onclick: () => { closeDetail(); view.tag = t; view.kind = "all"; go("wall"); renderWall(); }}, "#" + t))) : null,
+    h("div", {class:"stats d-stats"},
+      h("div", {}, h("strong", {}, pad(numberOf(it.id))), h("span", {}, "编号")),
+      h("div", {}, h("strong", {}, fmtDate(it.createdAt)), h("span", {}, "收于 " + d.toTimeString().slice(0, 5))),
+      it.updatedAt ? h("div", {}, h("strong", {}, fmtDate(it.updatedAt)), h("span", {}, "最后修改")) : null),
+  ].filter(Boolean));
   body.scrollTop = 0;
   $("#detail").hidden = false;
   if (!fromHistory) history.pushState({detail: it.id}, "");
@@ -707,7 +727,7 @@ let installEvt = null;
 const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; });
-if (standalone) { $("#installBtn").closest("li").hidden = true; $("#installBtn").closest("ul").previousElementSibling.hidden = true; }
+if (standalone) $("#installBlock").hidden = true;
 $("#installBtn").onclick = async () => {
   if (installEvt) { installEvt.prompt(); const r = await installEvt.userChoice; installEvt = null; if (r.outcome === "accepted") toast("已添加到主屏幕"); return; }
   $("#installHint").textContent = isIOS ? "在 Safari 点底部「分享」→「添加到主屏幕」" : "在浏览器菜单里选「安装应用」或「添加到主屏幕」";

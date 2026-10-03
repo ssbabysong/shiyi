@@ -1,5 +1,5 @@
 // 拾遗 service worker: app shell cached for offline use, fonts cached on first use
-const VERSION = "shiyi-v6";
+const VERSION = "shiyi-v7";
 const SHELL = ["./", "index.html", "styles.css", "app.js", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

@@ -64,51 +64,56 @@
 
   <!-- ============ 漫游 ============ -->
   <section class="screen" id="screen-wander" data-tab="wander" hidden>
-    <header class="appbar plain"><div class="appbar-row"><span class="appbar-title">漫游</span></div></header>
     <div class="scroll wander-wrap">
-      <p class="wander-lede" id="wanderLede">从过去的收藏里随机翻出一枚</p>
+      <div class="page-head">
+        <h1 class="page-title">漫游<span>.</span></h1>
+        <span class="page-count mono" id="wanderCount"></span>
+      </div>
+      <p class="page-sub" id="wanderLede">从过去的收藏里随机翻出一枚</p>
       <div class="deck" id="deck"></div>
       <div class="wander-actions">
-        <button class="pill ghost" id="wanderOpen" type="button">查看详情</button>
-        <button class="pill" id="wanderNext" type="button">再翻一枚</button>
+        <button class="text-link" id="wanderOpen" type="button">查看详情</button>
+        <span class="swipe-hint mono">← 滑动 →</span>
+        <button class="next-btn" id="wanderNext" type="button">再翻一枚<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
-      <p class="hint">也可以左右滑动卡片</p>
     </div>
   </section>
-
 
   <!-- ============ 我的 ============ -->
   <section class="screen" id="screen-me" data-tab="me" hidden>
     <header class="appbar plain"><div class="appbar-row">
       <button class="icon-btn back" id="meBack" aria-label="返回灵感"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <span class="appbar-title me-title">我的</span>
-      <span class="icon-btn" aria-hidden="true"></span>
     </div></header>
     <div class="scroll">
-      <div class="me-card">
-        <div class="me-mark">拾</div>
-        <div><b id="meCount">0 枚收藏</b><span id="meSince">从今天开始收集</span></div>
+      <h1 class="page-title">我的<span>.</span></h1>
+      <p class="page-sub" id="meSince">从今天开始收集</p>
+      <div class="stats">
+        <div><strong id="meCount">0</strong><span>枚收藏</span></div>
+        <div><strong id="meDays">0</strong><span>天</span></div>
+        <div><strong id="meTags">0</strong><span>个标签</span></div>
       </div>
 
-      <h2 class="group-title">外观</h2>
-      <div class="segmented" id="themeSeg" role="radiogroup" aria-label="外观">
-        <button type="button" data-theme-val="system">跟随系统</button>
-        <button type="button" data-theme-val="light">浅色</button>
-        <button type="button" data-theme-val="dark">深色</button>
+      <h2 class="sec"><span>外观</span><span class="mono">APPEARANCE</span></h2>
+      <div class="theme-pick" id="themeSeg" role="radiogroup" aria-label="外观">
+        <button type="button" role="radio" data-theme-val="system">跟随系统</button>
+        <button type="button" role="radio" data-theme-val="light">浅色</button>
+        <button type="button" role="radio" data-theme-val="dark">深色</button>
       </div>
 
-      <h2 class="group-title">数据</h2>
-      <ul class="list">
-        <li><button class="row" id="exportBtn" type="button"><span>导出备份</span><small>保存为 JSON 文件，含图片</small></button></li>
+      <h2 class="sec"><span>数据</span><span class="mono">DATA</span></h2>
+      <ul class="rows">
+        <li><button class="row" id="exportBtn" type="button"><span>导出备份</span><small>JSON，含图片</small></button></li>
         <li><label class="row" for="importFile"><span>从备份恢复</span><small>导入之前导出的 JSON</small></label><input type="file" id="importFile" accept="application/json,.json" hidden></li>
         <li><button class="row danger" id="clearBtn" type="button"><span>清空全部收藏</span><small>无法撤销</small></button></li>
       </ul>
 
-      <h2 class="group-title">安装</h2>
-      <ul class="list">
-        <li><button class="row" id="installBtn" type="button"><span>添加到主屏幕</span><small id="installHint">像原生 App 一样全屏打开，离线也能用</small></button></li>
-      </ul>
-      <p class="footnote">所有收藏只保存在这台设备的浏览器里，不会上传到任何服务器。换设备时请用「导出备份」。</p>
+      <div id="installBlock">
+        <h2 class="sec"><span>安装</span><span class="mono">INSTALL</span></h2>
+        <ul class="rows">
+          <li><button class="row" id="installBtn" type="button"><span>添加到主屏幕</span><small id="installHint">全屏打开，离线也能用</small></button></li>
+        </ul>
+      </div>
+      <p class="footnote">所有收藏只保存在这台设备的浏览器里，不会上传到任何服务器。换设备时请先导出备份。</p>
     </div>
   </section>
 
@@ -144,6 +149,7 @@
     </div>
   </header>
   <div class="scroll" id="detailBody"></div>
+  <nav class="toolbar" id="detailTools" aria-label="操作"></nav>
 </section>
 
 <!-- ============ 裁剪 ============ -->
