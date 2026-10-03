@@ -43,6 +43,9 @@ svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-l
 .icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;margin-right:-10px;color:var(--ink)}
 .icon-btn svg{width:23px;height:23px}
 .icon-btn.back{margin-right:0;margin-left:-12px}
+.appbar-actions{display:flex;gap:2px;margin-right:-10px}
+.appbar-actions .icon-btn{margin-right:0}
+.me-title{flex:1;text-align:center;font-size:20px;padding:0}
 .icon-btn:active{background:var(--line)}
 .text-btn{color:var(--accent);font-size:16px;padding:8px 2px}
 .text-btn.strong{font-weight:600}
@@ -99,7 +102,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-l
 .caption{margin:0;font-size:14px}
 
 /* ---------- tab bar ---------- */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:calc(var(--tabbar-h) + var(--sab));padding-bottom:var(--sab);background:var(--bar);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-top:1px solid var(--line)}
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;height:calc(var(--tabbar-h) + var(--sab));padding-bottom:var(--sab);background:var(--bar);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-top:1px solid var(--line)}
 .tab{display:grid;justify-items:center;gap:1px;font-size:10px;color:var(--muted);padding:6px 0}
 .tab svg{width:25px;height:25px}
 .tab[aria-current="page"]{color:var(--accent)}

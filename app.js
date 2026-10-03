@@ -243,21 +243,8 @@ function go(tab){
   haptic();
 }
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => go(b.dataset.go));
-
-function renderTags(){
-  const map = new Map();
-  for (const it of items) for (const t of it.tags || []) {
-    const e = map.get(t) || {n: 0};
-    e.n++;
-    map.set(t, e);
-  }
-  const rows = [...map.entries()].sort((a, b) => b[1].n - a[1].n);
-  $("#tagList").hidden = !rows.length;
-  $("#tagsNone").hidden = !!rows.length;
-  $("#tagList").replaceChildren(...rows.map(([t, e]) => h("li", {}, h("button", {class:"tag-row", type:"button", onclick: () => { view.tag = t; view.kind = "all"; go("wall"); renderWall(); $("#wallScroll").scrollTo({top: 0}); }},
-    h("span", {class:"t"}, t),
-    h("span", {class:"n mono"}, e.n)))));
-}
+$("#meBtn").onclick = () => go("me");
+$("#meBack").onclick = () => go("wall");
 
 function renderMe(){
   $("#meCount").textContent = items.length + " 枚收藏";
@@ -729,7 +716,7 @@ $("#installBtn").onclick = async () => {
 /* ============================================================
    启动
    ============================================================ */
-function renderAll(){ renderWall(); renderTags(); renderMe(); }
+function renderAll(){ renderWall(); renderMe(); }
 SAMPLES.find(s => s.id === "s3").src = sampleImage();
 applyTheme();
 renderAll();

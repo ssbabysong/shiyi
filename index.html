@@ -27,12 +27,17 @@
     <header class="appbar" id="wallbar">
       <div class="appbar-row">
         <span class="appbar-small">拾遗</span>
-        <button class="icon-btn" id="searchToggle" aria-label="搜索">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-        </button>
+        <div class="appbar-actions">
+          <button class="icon-btn" id="searchToggle" aria-label="搜索">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          </button>
+          <button class="icon-btn" id="meBtn" aria-label="我的">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg>
+          </button>
+        </div>
       </div>
       <div class="search-row" id="searchRow" hidden>
-        <input id="q" type="search" placeholder="搜索文字、来源、标签、色值" enterkeyhint="search">
+        <input id="q" type="search" placeholder="搜索文字、来源、标签" enterkeyhint="search">
         <button class="text-btn" id="searchCancel" type="button">取消</button>
       </div>
       <div class="filters" id="kinds" role="tablist" aria-label="按类型筛选"></div>
@@ -71,18 +76,14 @@
     </div>
   </section>
 
-  <!-- ============ 标签 ============ -->
-  <section class="screen" id="screen-tags" data-tab="tags" hidden>
-    <header class="appbar plain"><div class="appbar-row"><span class="appbar-title">标签</span></div></header>
-    <div class="scroll">
-      <ul class="list" id="tagList"></ul>
-      <p class="none" id="tagsNone" hidden>还没有标签。收藏时在「标签」里写几个词就会出现在这里。</p>
-    </div>
-  </section>
 
   <!-- ============ 我的 ============ -->
   <section class="screen" id="screen-me" data-tab="me" hidden>
-    <header class="appbar plain"><div class="appbar-row"><span class="appbar-title">我的</span></div></header>
+    <header class="appbar plain"><div class="appbar-row">
+      <button class="icon-btn back" id="meBack" aria-label="返回灵感"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <span class="appbar-title me-title">我的</span>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </div></header>
     <div class="scroll">
       <div class="me-card">
         <div class="me-mark">拾</div>
@@ -114,10 +115,8 @@
   <!-- ============ 底部标签栏 ============ -->
   <nav class="tabbar" aria-label="主导航">
     <button class="tab" data-go="wall" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="10" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="6" rx="1.5"/><rect x="3.5" y="16.5" width="7" height="4" rx="1.5"/><rect x="13.5" y="12.5" width="7" height="8" rx="1.5"/></svg><span>灵感</span></button>
-    <button class="tab" data-go="wander"><svg viewBox="0 0 24 24"><path d="M3 7h4l9 10h5M3 17h4l2.5-2.8M15.5 9.8 16 9.3V7h5"/><path d="M19 4.5 21.5 7 19 9.5M19 14.5l2.5 2.5-2.5 2.5"/></svg><span>漫游</span></button>
     <button class="fab" id="addBtn" aria-label="收藏新灵感"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button class="tab" data-go="tags"><svg viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"/><circle cx="8" cy="8" r="1.4"/></svg><span>标签</span></button>
-    <button class="tab" data-go="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg><span>我的</span></button>
+    <button class="tab" data-go="wander"><svg viewBox="0 0 24 24"><path d="M3 7h4l9 10h5M3 17h4l2.5-2.8M15.5 9.8 16 9.3V7h5"/><path d="M19 4.5 21.5 7 19 9.5M19 14.5l2.5 2.5-2.5 2.5"/></svg><span>漫游</span></button>
   </nav>
 </div>
 
